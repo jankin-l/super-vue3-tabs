@@ -10,11 +10,13 @@ import {
   computed,
   ComponentPublicInstance,
   Ref,
+  nextTick
 } from "vue";
 import { useElementVisibility } from "@vueuse/core";
 
 interface Props {
   themeColor?: string;
+  dropdownEnable?: boolean
 }
 // TODO: extract to a separate file
 interface Tab {
@@ -31,10 +33,12 @@ interface TabVisibility {
 
 const props = withDefaults(defineProps<Props>(), {
   themeColor: "#3b82f6",
+  dropdownEnable: true
 });
 
 const emit = defineEmits<{
   (e: "change", tab: Tab): void;
+  (e: "more"): void;
 }>();
 
 const tabsContainerRef = ref<HTMLDivElement | null>(null);
@@ -104,11 +108,31 @@ const selectTab = ({ tab, tabValue }: { tab?: Tab; tabValue?: any }) => {
   emit("change", tab);
 };
 
+const moreBtnClick = () => {
+  if (!props.dropdownEnable) {
+    emit("more")
+  }
+}
+
+const moreBtnOver = () => {
+  if (props.dropdownEnable) {
+    showDropdown.value = true
+  }
+}
+
 onMounted(() => {
   tabsContainerRef.value?.addEventListener("wheel", scrollHorizontally);
   if (!tabs.value.length) return;
-  if(activeTabValueVModel.value) return selectTab({ tabValue: activeTabValueVModel.value})
-  selectTab({tab: tabs.value[0]});
+  nextTick(() => {
+    setTimeout(() => {
+      if(activeTabValueVModel.value) {
+        selectTab({ tabValue: activeTabValueVModel.value})
+      } else {
+        selectTab({tab: tabs.value[0]});
+      }
+    }, 100)
+  })
+  
 });
 
 onUnmounted(() => {
@@ -163,7 +187,7 @@ onUnmounted(() => {
 
       <!-- Dropdown -->
       <div v-if="dropwDownList.length" @mouseleave="showDropdown = false">
-        <button class="w-6 h-full" @mouseover="showDropdown = true">
+        <button class="w-6 h-full" @mouseover="moreBtnOver" @click="moreBtnClick">
           <img src="@/assets/menu.svg" width="16" class="m-auto" />
         </button>
         <div class="dropdown" v-if="showDropdown">
