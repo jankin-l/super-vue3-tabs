@@ -17,6 +17,10 @@ const tabChanged = (tab: Tab) => {
   console.log('tab changed', tab);
 };
 
+const onMore = () => {
+  console.log('onMore')
+}
+
 </script>
 
 <template>
@@ -30,7 +34,7 @@ const tabChanged = (tab: Tab) => {
     
     <h1 class="mb-4 text-xl font-semibold">Demo 1</h1>
     <div class="p-4 bg-white border rounded-lg">
-      <Tabs @change="tabChanged" v-model="activeTab">
+      <Tabs @change="tabChanged" v-model="activeTab" @more="onMore">
         <Tab
           v-for="index in 16"
           :key="index"
