@@ -187,7 +187,7 @@ onUnmounted(() => {
 
       <!-- Dropdown -->
       <div v-if="dropwDownList.length" @mouseleave="showDropdown = false">
-        <button class="w-6 h-full" @mouseover="moreBtnOver" @click="moreBtnClick">
+        <button class="w-6 h-full super-vue3-tabs-more" @mouseover="moreBtnOver" @click="moreBtnClick">
           <img src="@/assets/menu.svg" width="16" class="m-auto" />
         </button>
         <div class="dropdown" v-if="showDropdown">
