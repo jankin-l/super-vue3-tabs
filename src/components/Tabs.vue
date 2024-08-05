@@ -107,6 +107,9 @@ const selectTab = ({ tab, tabValue }: { tab?: Tab; tabValue?: any }) => {
   activeTabValueVModel.value = tab.value;
   emit("change", tab);
 };
+defineExpose({
+  selectTab,
+});  
 
 const moreBtnClick = () => {
   if (!props.dropdownEnable) {
